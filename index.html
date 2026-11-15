@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Risiko Kredit & Efisiensi Panggilan — Bank Marketing</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js 4.4.3 via jsDelivr -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     LOADING OVERLAY
+══════════════════════════════════════════════════════════ -->
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <p>Memuat data, harap tunggu…</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════════ -->
+<header class="dashboard-header">
+  <div class="container">
+    <div class="header-icon">🏦</div>
+    <div>
+      <div class="header-title">Dashboard Risiko Kredit, Efisiensi Panggilan &amp; Targeting Nasabah</div>
+      <div class="header-subtitle">Analitik Kampanye Pemasaran — Deposito Berjangka | Data: 45.211 Nasabah</div>
+    </div>
+    <div class="header-badge">Kepala Retail Banking &amp; Kepala Operasi Pemasaran</div>
+  </div>
+</header>
+
+<main class="container" style="padding-top:1.5rem; padding-bottom:2rem;">
+
+  <!-- ══════════════════════════════════════════════════════
+       FILTER SECTION
+  ══════════════════════════════════════════════════════ -->
+  <section id="filter-section" class="card">
+    <div class="section-title"><span class="dot"></span> Filter Nasabah</div>
+    <div class="filter-grid" id="filter-grid">
+
+      <div class="filter-group">
+        <label for="f-job">Pekerjaan</label>
+        <select id="f-job"><option value="">Semua</option></select>
+      </div>
+
+      <div class="filter-group">
+        <label for="f-housing">KPR</label>
+        <select id="f-housing"><option value="">Semua</option></select>
+      </div>
+
+      <div class="filter-group">
+        <label for="f-loan">Pinjaman Pribadi</label>
+        <select id="f-loan"><option value="">Semua</option></select>
+      </div>
+
+      <div class="filter-group">
+        <label for="f-default">Status Gagal Bayar</label>
+        <select id="f-default"><option value="">Semua</option></select>
+      </div>
+
+      <div class="filter-group">
+        <label for="f-contact">Metode Kontak</label>
+        <select id="f-contact"><option value="">Semua</option></select>
+      </div>
+
+      <div class="filter-group">
+        <label for="f-month">Bulan</label>
+        <select id="f-month"><option value="">Semua</option></select>
+      </div>
+
+      <div class="filter-group">
+        <label for="f-poutcome">Hasil Kampanye Lalu</label>
+        <select id="f-poutcome"><option value="">Semua</option></select>
+      </div>
+
+      <div class="filter-group">
+        <button id="btn-reset">↺ Reset Filter</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       KPI CARDS
+  ══════════════════════════════════════════════════════ -->
+  <section id="kpi-section" style="margin:1.5rem 0;">
+    <div class="section-title"><span class="dot" style="background:#0d9488"></span> Indikator Utama (Sesuai Filter)</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Nasabah Tersaring</div>
+        <div class="kpi-value" id="kpi-total">—</div>
+        <div class="kpi-sub">dari 45.211 nasabah</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Tingkat Konversi</div>
+        <div class="kpi-value" id="kpi-conv">—</div>
+        <div class="kpi-sub">persentase berlangganan deposito</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Berlangganan</div>
+        <div class="kpi-value" id="kpi-subs">—</div>
+        <div class="kpi-sub">nasabah berhasil dikonversi</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Panggilan per Konversi</div>
+        <div class="kpi-value" id="kpi-cps">—</div>
+        <div class="kpi-sub">rata-rata panggilan per berlangganan</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       FILTER-AWARE CHARTS
+  ══════════════════════════════════════════════════════ -->
+  <section id="charts-section">
+    <div class="section-title"><span class="dot" style="background:#14b8a6"></span> Analisis Konversi (Sesuai Filter)</div>
+
+    <div class="charts-grid">
+
+      <!-- Konversi per Bulan -->
+      <div class="card chart-card">
+        <div class="chart-title">📅 Konversi per Bulan</div>
+        <div class="chart-wrap" id="chart-month-wrap">
+          <canvas id="chart-month"></canvas>
+        </div>
+      </div>
+
+      <!-- Konversi per Jumlah Panggilan -->
+      <div class="card chart-card">
+        <div class="chart-title">📞 Konversi per Jumlah Panggilan</div>
+        <div class="chart-wrap" id="chart-contacts-wrap">
+          <canvas id="chart-contacts"></canvas>
+        </div>
+      </div>
+
+      <!-- Konversi per Saldo -->
+      <div class="card chart-card">
+        <div class="chart-title">💰 Konversi per Kelompok Saldo (Rp)</div>
+        <div class="chart-wrap" id="chart-balance-wrap">
+          <canvas id="chart-balance"></canvas>
+        </div>
+      </div>
+
+      <!-- Konversi per Hasil Kampanye Lalu -->
+      <div class="card chart-card">
+        <div class="chart-title">🏆 Konversi per Hasil Kampanye Lalu</div>
+        <div class="chart-wrap" id="chart-poutcome-wrap">
+          <canvas id="chart-poutcome"></canvas>
+        </div>
+      </div>
+
+      <!-- Konversi per Pekerjaan (horizontal, full width) -->
+      <div class="card chart-card" style="grid-column: 1 / -1;">
+        <div class="chart-title">👔 Konversi per Jenis Pekerjaan</div>
+        <div class="chart-wrap" id="chart-job-wrap">
+          <canvas id="chart-job"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       TRADE-OFF SECTION  (independent of filters)
+  ══════════════════════════════════════════════════════ -->
+  <section id="tradeoff-section">
+    <div class="section-title">
+      <span class="dot" style="background:#818cf8"></span>
+      Analisis Trade-off: Biaya Panggilan vs Pendapatan Konversi
+      <span style="font-size:.7rem;color:#94a3b8;font-weight:400;margin-left:.5rem;">
+        (Independen dari filter — berbasis model Regresi Logistik pada 20% data validasi; durasi dikecualikan)
+      </span>
+    </div>
+
+    <!-- Sliders -->
+    <div class="card" style="margin-bottom:1.25rem;">
+      <div class="tradeoff-controls">
+
+        <div class="slider-group">
+          <label>Biaya per Panggilan
+            <span id="val-cost">Rp 25.000</span>
+          </label>
+          <input type="range" id="sl-cost"
+                 min="5000" max="200000" step="5000" value="25000" />
+          <div class="slider-note">* Asumsi biaya operasional per panggilan keluar</div>
+        </div>
+
+        <div class="slider-group">
+          <label>Pendapatan per Berlangganan
+            <span id="val-rev">Rp 500.000</span>
+          </label>
+          <input type="range" id="sl-rev"
+                 min="50000" max="5000000" step="50000" value="500000" />
+          <div class="slider-note">* Asumsi pendapatan bersih dari nasabah yang berlangganan deposito</div>
+        </div>
+
+        <div class="slider-group">
+          <label>Rata-rata Panggilan per Nasabah
+            <span id="val-cpn">2</span>
+          </label>
+          <input type="range" id="sl-cpn"
+                 min="1" max="10" step="1" value="2" />
+          <div class="slider-note">* Asumsi jumlah panggilan rata-rata per nasabah yang dihubungi</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Trade-off Charts -->
+    <div class="tradeoff-charts">
+      <div class="card chart-card">
+        <div class="chart-title">📈 Profit vs Threshold Klasifikasi</div>
+        <div class="chart-wrap" id="chart-profit-wrap">
+          <canvas id="chart-profit"></canvas>
+        </div>
+      </div>
+      <div class="card chart-card">
+        <div class="chart-title">🎯 Presisi &amp; Recall vs Threshold</div>
+        <div class="chart-wrap" id="chart-pr-wrap">
+          <canvas id="chart-pr"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optimal threshold box -->
+    <div class="optimal-box">
+      <h3>🏅 Rekomendasi Threshold Optimal</h3>
+      <div class="optimal-metrics">
+        <div class="opt-metric">
+          <div class="label">Threshold</div>
+          <div class="val" id="opt-threshold">—</div>
+          <div class="sub">nilai batas probabilitas</div>
+        </div>
+        <div class="opt-metric">
+          <div class="label">Nasabah Dihubungi</div>
+          <div class="val" id="opt-contacted">—</div>
+          <div class="sub">dari total data validasi</div>
+        </div>
+        <div class="opt-metric">
+          <div class="label">Recall (Cakupan)</div>
+          <div class="val" id="opt-recall">—</div>
+          <div class="sub">calon nasabah berpotensi terjangkau</div>
+        </div>
+        <div class="opt-metric">
+          <div class="label">Presisi</div>
+          <div class="val" id="opt-precision">—</div>
+          <div class="sub">ketepatan prediksi positif</div>
+        </div>
+        <div class="opt-metric">
+          <div class="label">Profit Estimasi</div>
+          <div class="val" id="opt-profit">—</div>
+          <div class="sub">pada data validasi</div>
+        </div>
+        <div class="opt-metric">
+          <div class="label">Profit vs Hubungi Semua</div>
+          <div class="val" id="opt-vs-all">—</div>
+          <div class="sub">selisih keuntungan</div>
+        </div>
+      </div>
+      <div class="disclaimer">
+        ⚠️ Semua angka biaya dan pendapatan di atas adalah asumsi ilustratif. Gunakan data aktual biaya operasional
+        dan nilai nasabah untuk analisis bisnis yang akurat. Model tidak menggunakan kolom <em>durasi</em>
+        (data leakage). ROC-AUC model: <strong id="model-auc">—</strong>.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="dashboard-footer">
+  Dashboard Analitik Pemasaran Bank · Data: UCI Bank Marketing Dataset · Dibuat untuk keperluan analisis internal
+</footer>
+
+<!-- Main script -->
+<script src="script.js"></script>
+
+</body>
+</html>

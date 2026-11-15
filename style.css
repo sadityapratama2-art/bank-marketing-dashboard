@@ -1,0 +1,303 @@
+/* ============================================================
+   style.css  –  Bank Marketing Dashboard
+   Palette  : indigo (#4f46e5 / #6366f1) + teal (#0d9488 / #14b8a6)
+   Author   : dashboard build  2024
+   ============================================================ */
+
+/* ── Reset & base ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── Layout helpers ───────────────────────────────────────── */
+.container { max-width: 1400px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* ── Header ───────────────────────────────────────────────── */
+.dashboard-header {
+  background: linear-gradient(135deg, #4f46e5 0%, #0d9488 100%);
+  color: #fff;
+  padding: 1.5rem 0;
+  box-shadow: 0 4px 12px rgba(79,70,229,.25);
+}
+.dashboard-header .container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.header-icon { font-size: 2rem; }
+.header-title { font-size: 1.35rem; font-weight: 700; letter-spacing: -.01em; }
+.header-subtitle { font-size: .8rem; opacity: .85; margin-top: .15rem; }
+.header-badge {
+  margin-left: auto;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 999px;
+  padding: .25rem .85rem;
+  font-size: .75rem;
+  white-space: nowrap;
+}
+
+/* ── Section titles ───────────────────────────────────────── */
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 1rem;
+  padding-bottom: .4rem;
+  border-bottom: 2px solid #e0e7ff;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.section-title span.dot {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #4f46e5;
+}
+
+/* ── Cards / surface ──────────────────────────────────────── */
+.card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.07), 0 1px 3px rgba(0,0,0,.05);
+  padding: 1.25rem 1.5rem;
+}
+
+/* ── Filter bar ───────────────────────────────────────────── */
+#filter-section {
+  margin: 1.5rem 0;
+}
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: .75rem;
+  align-items: end;
+}
+.filter-group label {
+  display: block;
+  font-size: .72rem;
+  font-weight: 600;
+  color: #6366f1;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: .3rem;
+}
+.filter-group select {
+  width: 100%;
+  padding: .45rem .75rem;
+  border: 1.5px solid #e0e7ff;
+  border-radius: 8px;
+  background: #f8fafc;
+  font-size: .85rem;
+  color: #1e293b;
+  outline: none;
+  transition: border-color .2s;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .6rem center;
+  padding-right: 2rem;
+}
+.filter-group select:focus { border-color: #6366f1; }
+
+#btn-reset {
+  padding: .5rem 1.2rem;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+  align-self: end;
+  height: 36px;
+}
+#btn-reset:hover  { background: #4338ca; }
+#btn-reset:active { transform: scale(.97); }
+
+/* ── KPI cards ────────────────────────────────────────────── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.kpi-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.07);
+  padding: 1.1rem 1.4rem;
+  border-left: 4px solid #6366f1;
+  transition: transform .15s;
+}
+.kpi-card:hover { transform: translateY(-2px); }
+.kpi-card:nth-child(2) { border-left-color: #0d9488; }
+.kpi-card:nth-child(3) { border-left-color: #14b8a6; }
+.kpi-card:nth-child(4) { border-left-color: #818cf8; }
+.kpi-label {
+  font-size: .72rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.kpi-value {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+  margin: .25rem 0 .1rem;
+}
+.kpi-sub { font-size: .75rem; color: #94a3b8; }
+
+/* ── Chart grid ───────────────────────────────────────────── */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.chart-card { position: relative; }
+.chart-card .chart-title {
+  font-size: .82rem;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: .75rem;
+}
+
+/* Chart canvas heights */
+.chart-wrap { position: relative; }
+#chart-month-wrap    { height: 240px; }
+#chart-contacts-wrap { height: 240px; }
+#chart-balance-wrap  { height: 240px; }
+#chart-job-wrap      { height: 320px; }
+#chart-poutcome-wrap { height: 240px; }
+
+/* Trade-off section charts */
+#chart-profit-wrap   { height: 280px; }
+#chart-pr-wrap       { height: 280px; }
+
+/* ── Trade-off section ────────────────────────────────────── */
+#tradeoff-section { margin-bottom: 2rem; }
+
+.tradeoff-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.slider-group label {
+  display: flex;
+  justify-content: space-between;
+  font-size: .8rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: .3rem;
+}
+.slider-group label span { color: #6366f1; font-weight: 700; }
+.slider-group input[type=range] {
+  width: 100%;
+  accent-color: #6366f1;
+  cursor: pointer;
+}
+.slider-note {
+  font-size: .68rem;
+  color: #94a3b8;
+  margin-top: .2rem;
+}
+
+.tradeoff-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ── Optimal threshold highlight box ─────────────────────── */
+.optimal-box {
+  background: linear-gradient(135deg, #eef2ff 0%, #f0fdfa 100%);
+  border: 2px solid #818cf8;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+}
+.optimal-box h3 {
+  font-size: .9rem;
+  font-weight: 700;
+  color: #4f46e5;
+  margin-bottom: 1rem;
+}
+.optimal-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: .75rem;
+}
+.opt-metric {
+  background: #fff;
+  border-radius: 10px;
+  padding: .8rem 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,.07);
+}
+.opt-metric .label { font-size: .7rem; color: #64748b; font-weight: 600; text-transform: uppercase; }
+.opt-metric .val   { font-size: 1.3rem; font-weight: 700; color: #4f46e5; }
+.opt-metric .sub   { font-size: .72rem; color: #94a3b8; margin-top: .1rem; }
+
+.disclaimer {
+  font-size: .72rem;
+  color: #94a3b8;
+  font-style: italic;
+  margin-top: .75rem;
+}
+
+/* ── Loading overlay ──────────────────────────────────────── */
+#loading-overlay {
+  position: fixed; inset: 0;
+  background: rgba(248,250,252,.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  gap: 1rem;
+}
+.spinner {
+  width: 44px; height: 44px;
+  border: 4px solid #e0e7ff;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#loading-overlay p { color: #6366f1; font-weight: 600; }
+
+/* ── Footer ───────────────────────────────────────────────── */
+.dashboard-footer {
+  text-align: center;
+  padding: 1.5rem;
+  font-size: .75rem;
+  color: #94a3b8;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 2rem;
+}
+
+/* ── Responsive tweaks ────────────────────────────────────── */
+@media (max-width: 768px) {
+  .header-title    { font-size: 1.1rem; }
+  .header-badge    { display: none; }
+  .kpi-value       { font-size: 1.5rem; }
+  .tradeoff-charts { grid-template-columns: 1fr; }
+  .charts-grid     { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .filter-grid { grid-template-columns: 1fr 1fr; }
+  #chart-job-wrap { height: 420px; }
+}
